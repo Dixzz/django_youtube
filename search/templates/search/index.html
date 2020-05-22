@@ -1,0 +1,162 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>YouTube</title>
+
+    <link rel="icon" href="{% static 'search/youtube.png' %}" type="icon type">
+
+    <!-- Custom Fonts & Effects-->
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans|Nunito|Comfortaa&display=swap&effect=outline" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rancho&effect=shadow-multiple" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Custom Icons -->
+    <script src="https://kit.fontawesome.com/cb690ffaf5.js"></script>
+<script>
+  function fun() {
+  console.log('doing');
+   var z = document.getElementById('display');
+   z.style.display= "block";
+  }
+</script>
+    <!-- Custom CSS Stuff -->
+    <style>
+        .ripple {
+          background-position: center;
+          transition: background 0.8s;
+        }
+        .ripple:hover {
+          background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+        }
+        .ripple:active {
+          background-color: #6eb9f7;
+          background-size: 100%;
+          transition: background 0s;
+        }
+
+        .ripple2 {
+          background-position: center;
+          transition: background 0.8s;
+        }
+        .ripple2:hover {
+          background: #5e384b radial-gradient(circle, transparent 1%, #5e384b 1%) center/15000%;
+        }
+        .ripple2:active {
+          background-color: #7d8c91;
+          background-size: 100%;
+          transition: background 0s;
+        }
+
+        button {
+          border: none;
+          border-radius: 2px;
+          padding: 12px 18px;
+          font-size: 16px;
+          cursor: pointer;
+          color: white;
+          background-color: #2196f3;
+          box-shadow: 0 0 4px #999;
+          outline: none;
+        }
+
+        .bd-placeholder-img {
+              font-size: 1.125rem;
+              text-anchor: middle;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+              }
+
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+          }
+        }
+        .form-control {
+        border-radius: 18px;
+        }
+        .btn-primary {
+          border-radius: 24px;
+        }
+        .btn-secondary {
+          border-radius: 24px;
+        }
+
+        .my {
+        background-color: #ff3232;
+        border-radius: 18px;
+        margin-top: 20px;
+        margin-right: 30px;
+        margin-left: 30px;
+        }
+        .jumbotron-heading {
+        color: #fff;
+        text-shadow: 6px 6px 6px #000000;
+        }
+        body{background-color: #000000;}
+        .shadow-sm{background-color: #000000;border-radius: 14px;}
+        .btn-outline-secondary{text-transform:capitalize;border-radius: 18px;font-size: 12px;width: 60px;color: #ffffff;}
+        .text-muted{font-family: Noto Sans SC;color: #ffffff;font-weight: bold;} <!--colors the Something... bar, "Now watch..." -->
+        .card-text{font-family: Nunito;}
+        .btn-primary:focus{box-shadow:0 0 0 0.2rem rgba(255,90,90,1)}
+        .btn-primary:hover{background-color: #0000ff;}
+        .card-body{background-color: #000000; color: #ffffff;margin-left: -1px;margin-right: -1px;margin-bottom: -1.5px;border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;}
+      </style>
+  </head>
+  <body>
+
+<main role="main" style="font-family: Comfortaa; background-color: #000000;">
+  <section class="jumbotron text-center my">
+    <div class="container">
+      <h1 class="jumbotron-heading">YouTube API</h1>
+      <p class="lead text-muted font-effect-outline" style="font-family: Rancho;"><font color="#ddeeff">Now watch without ads</font></p>
+      <form method="POST">
+      <div class="input-group mb-3">
+        {% csrf_token %}
+        <input type="text" name="search" class="form-control text-muted" style="font-weight: bold; border-radius: 24px;" aria-label="Username" placeholder="Search Something...">
+      </div>
+      <p>
+        <button type="submit" name="submit" value="search" class="btn btn-primary my-2 ripple">Search</button><br>
+        <button type="submit" name="submit" value="lucky"  class="btn btn-secondary my-2 ripple2">I'm Feeling Lucky</button>
+      </p>
+      </form>
+      {% ifequal null search.q %}
+        {% else %}
+      <p id="display" class="lead text-muted" style="font-family: Nunito;font-style: 22px;font-weight: normal;"><font color="#ddeeff">Showing results for:<br> <span style="color: black;">{{search.q}}</span></font></p>
+      {% endifequal %}
+
+    </div>
+  </section>
+  <div class="album py-5 my" style="margin-bottom: 40px; background-color: #191919;">
+    <div class="container" style="margin-top: 40px;">
+      <div class="row">
+        {% for video in videos %}
+        <div class="col-md-4" >
+          <div class="card mb-4 shadow-sm" style="margin: -5px;">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ video.thumbnail }}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"></img>
+            <div class="card-body">
+              <p class="card-text">{{video.title}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a type="button" href="{{video.url}}" class="btn btn-sm btn-outline-secondary ripple" style="font-family: Work Sans;">Watch</a>
+                </div>
+                <small class="text-muted" id="likeCount"><i class="far fa-thumbs-up" style="color: red;"></i> {{video.likes}} <br> <i class="far fa-eye" style="color: #ffe8e8;"></i> {{video.views}} <br> <i class="far fa-clock" ></i> {{video.duration}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
